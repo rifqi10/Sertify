@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Webinar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <%- include('../partials/header') %>
+
+    <!-- Main Content -->
+    <main class="container px-6 py-12 mx-auto">
+      <!-- Detail Section -->
+      <section class="max-w-4xl mx-auto bg-transparent rounded-lg">
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-12">
+            <!-- Title -->
+            <h1
+              id="judul"
+              class="text-2xl font-extrabold leading-tight text-gray-800"
+            >
+              Judul
+            </h1>
+
+            <!-- Description -->
+            <p id="deskripsi" class="text-lg text-gray-600">
+              Deskripsi konten berada di sini.
+            </p>
+          </div>
+
+          <!-- Thumbnail -->
+          <div id="thumbnail-container" class="mb-8">
+            <img
+              id="thumbnail"
+              src=""
+              alt="Thumbnail"
+              class="object-cover w-full rounded-lg shadow-md h-90"
+            />
+          </div>
+
+          <div class="p-6 mb-6 bg-white rounded-md shadow-md">
+            <!-- Date and Platform -->
+            <div class="flex flex-col mb-6">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <p id="tanggal" class="font-bold text-gray-500">/p></p>
+                </div>
+              </div>
+              <div class="p-4 bg-gray-100 rounded-md">
+                <label
+                  for="penyelenggara"
+                  class="block mb-2 font-bold text-gray-700"
+                  >Penyelenggara</label
+                >
+                <p
+                  id="penyelenggara"
+                  class="mb-2 font-semibold text-gray-800"
+                ></p>
+              </div>
+            </div>
+            <div class="p-2 mb-6 bg-gray-100 rounded-md">
+              <label
+                for="penyelenggara"
+                class="block mb-2 font-bold text-gray-700"
+                >Platform</label
+              >
+              <p id="platform" class="mb-2 font-semibold text-gray-800"></p>
+            </div>
+          </div>
+
+          <div class="flex">
+            <a
+              id="link"
+              href="#"
+              target="_blank"
+              class="flex items-center justify-center px-10 py-4 font-semibold text-white bg-yellow-500 rounded rounded-lg hover:bg-yellow-600"
+            >
+              Join
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Ambil data dari localStorage
+        const webinar = JSON.parse(localStorage.getItem("selectedWebinar"));
+        if (!webinar) {
+          alert("Tidak ada data webinar ditemukan!");
+          window.location.href = "/listWebinar"; // Redirect ke daftar webinar
+          return;
+        }
+
+        // Masukkan data ke elemen HTML
+        document.getElementById("judul").textContent = webinar.judul;
+        document.getElementById("deskripsi").textContent = webinar.deskripsi;
+        document.getElementById("penyelenggara").textContent =
+          webinar.penyelenggara;
+        document.getElementById("tanggal").textContent = webinar.tanggal;
+        document.getElementById("platform").textContent = webinar.platform;
+        document.getElementById("link").href = webinar.link;
+
+        // Menampilkan thumbnail jika ada
+        if (webinar.thumbnail) {
+          document.getElementById("thumbnail").src = webinar.thumbnail;
+        } else {
+          document.getElementById("thumbnail-container").remove(); // Menghapus elemen jika tidak ada thumbnail
+        }
+      });
+    </script>
+  </body>
+</html>

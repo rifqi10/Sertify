@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webinar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body class="flex flex-col min-h-screen bg-gray-100">
+    <!-- Include Header -->
+    <%- include('../partials/header') %>
+
+    <!-- Main Content -->
+    <main class="container flex-grow px-6 py-8 mx-auto">
+      <!-- Judul -->
+      <section class="mb-8 text-center">
+        <h2 class="text-3xl font-bold text-yellow-500">
+          Temukan Webinarmu Disini!
+        </h2>
+        <p class="text-gray-600">
+          Temukan Kumpulan Webinar untuk Mengasah Pengetahuan dan Meningkatkan
+          Keahlianmu!
+        </p>
+      </section>
+
+      <!-- Search and Filter -->
+      <div class="flex items-center mb-4">
+        <div class="relative flex-grow">
+          <input
+            type="text"
+            placeholder="Cari Webinar"
+            class="w-full py-2 pl-10 pr-4 mr-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+          />
+          <!-- Icon Search Font Awesome -->
+          <span
+            class="absolute text-gray-500 transform -translate-y-1/2 right-3 top-1/2"
+          >
+            <i class="fa fa-search"></i>
+          </span>
+        </div>
+
+        <select
+          class="px-2 py-2 ml-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+        >
+          <option value="">Kategori</option>
+          <option value="tech">Teknologi</option>
+          <option value="edu">Pendidikan</option>
+          <option value="biz">Bisnis</option>
+        </select>
+      </div>
+
+      <!-- Webinar List -->
+      <div id="webinar-list" class="grid gap-1">
+        <!-- Webinar items will be injected here via JavaScript -->
+      </div>
+    </main>
+
+    <!-- Include Footer -->
+    <%- include('../partials/footer') %>
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const webinars = JSON.parse(localStorage.getItem("webinars")) || [];
+      const webinarListContainer = document.getElementById("webinar-list");
+
+      webinars.forEach(function (webinar, index) {
+        // Memeriksa apakah webinar sudah disetujui
+        if (webinar.approved) {
+          const webinarElement = document.createElement("div");
+          webinarElement.classList.add(
+            "flex",
+            "items-center",
+            "p-2",
+            "bg-transparent",
+            "rounded-lg"
+          );
+          webinarElement.setAttribute("data-index", index);
+
+          webinarElement.innerHTML = `
+            <div class="flex-shrink-0 w-40 h-40 bg-gray-300 rounded-lg">
+              ${
+                webinar.thumbnail
+                  ? `<img src="${webinar.thumbnail}" alt="Thumbnail" class="object-cover w-full h-full rounded-lg">`
+                  : '<span class="text-xl font-bold text-gray-500">▶</span>'
+              }
+            </div>
+            <div class="flex-1 px-4 py-8 bg-white rounded-lg">
+              <h3 class="text-lg font-semibold text-gray-800">${
+                webinar.judul
+              }</h3>
+              <p class="mb-2 text-gray-600">${webinar.deskripsi}</p>
+              <div>
+                <button class="px-4 py-2 text-white bg-yellow-500 rounded-lg shadow detail-btn hover:bg-yellow-600">
+                  Detail
+                </button>
+              </div>
+            </div>
+          `;
+
+          // Event listener tombol Detail
+          const detailButton = webinarElement.querySelector(".detail-btn");
+          detailButton.addEventListener("click", function () {
+            localStorage.setItem("selectedWebinar", JSON.stringify(webinar));
+            window.location.href = "/detailWebinar"; // Arahkan ke halaman detail
+          });
+
+          // Menambahkan elemen webinar ke container
+          webinarListContainer.appendChild(webinarElement);
+        }
+      });
+    });
+  </script>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Webinar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Include Header -->
+    <%- include('../partials/header') %>
+
+    <!-- Main Content -->
+    <main class="container px-6 py-12 mx-auto">
+      <div class="text-center">
+        <h2 class="mb-4 text-4xl font-bold text-yellow-500">
+          Publikasikan Webinarmu di Sini!
+        </h2>
+        <p class="mb-8 text-gray-600">
+          Bagikan pengetahuanmu dan jangkau lebih banyak peserta bersama kami!
+          ✍️
+        </p>
+      </div>
+
+      <form
+        id="webinar-form"
+        class="max-w-4xl p-8 mx-auto space-y-6 bg-transparent rounded-lg"
+      >
+        <!-- Judul Webinar -->
+        <input
+          type="text"
+          placeholder="Judul Webinar"
+          class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          id="judul"
+        />
+
+        <!-- Penyelenggara Webinar -->
+        <input
+          type="text"
+          placeholder="Penyelenggara Webinar"
+          class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          id="penyelenggara"
+        />
+
+        <!-- Tanggal Webinar -->
+        <input
+          type="date"
+          class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          id="tanggal"
+        />
+
+        <!-- Platform Webinar -->
+        <input
+          type="text"
+          placeholder="Platform Webinar"
+          class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          id="platform"
+        />
+
+        <!-- Link Webinar -->
+        <input
+          type="url"
+          placeholder="Link Webinar"
+          class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          id="link"
+        />
+
+        <!-- Deskripsi Webinar -->
+        <textarea
+          placeholder="Deskripsi Webinar"
+          rows="4"
+          class="w-full p-4 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          id="deskripsi"
+        ></textarea>
+
+        <!-- Thumbnail -->
+        <div>
+          <label class="block mb-2 text-gray-600">Thumbnail</label>
+          <input
+            type="file"
+            class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            id="thumbnail"
+          />
+        </div>
+
+        <!-- Kategori Webinar -->
+        <select
+          class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          id="kategori"
+        >
+          <option value="" disabled selected>Kategori Webinar</option>
+          <option value="Teknologi">Teknologi</option>
+          <option value="Bisnis">Bisnis</option>
+          <option value="Pendidikan">Pendidikan</option>
+          <option value="Desain">Desain</option>
+        </select>
+
+        <!-- Buttons -->
+        <div class="flex justify-start space-x-4">
+          <button
+            type="button"
+            class="px-6 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300"
+            onclick="window.location.href='/adminWebinar';"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="px-6 py-2 text-white bg-yellow-500 rounded-lg hover:bg-yellow-600"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </main>
+    
+    <!-- Include Footer -->
+    <%- include('../partials/footer') %>
+
+    <script>
+      // Fungsi untuk menangani submit form
+      document
+        .getElementById("webinar-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Mencegah form disubmit
+
+          // Ambil data dari form
+          const judul = document.getElementById("judul").value;
+          const deskripsi = document.getElementById("deskripsi").value;
+          const penyelenggara = document.getElementById("penyelenggara").value;
+          const tanggal = document.getElementById("tanggal").value;
+          const platform = document.getElementById("platform").value;
+          const link = document.getElementById("link").value;
+          const kategori = document.getElementById("kategori").value;
+          const thumbnailFile = document.getElementById("thumbnail").files[0];
+
+          // Validasi input
+          if (
+            !judul ||
+            !penyelenggara ||
+            !tanggal ||
+            !platform ||
+            !link ||
+            !deskripsi ||
+            !kategori
+          ) {
+            alert("Semua field wajib diisi!");
+            return;
+          }
+
+          let thumbnailURL = null;
+
+          if (thumbnailFile) {
+            const reader = new FileReader();
+            reader.onloadend = function () {
+              thumbnailURL = reader.result;
+              saveWebinarData();
+            };
+            reader.readAsDataURL(thumbnailFile);
+          } else {
+            saveWebinarData();
+          }
+
+          function saveWebinarData() {
+            const webinarData = {
+              judul,
+              deskripsi,
+              penyelenggara,
+              tanggal,
+              platform,
+              link,
+              kategori,
+              thumbnail: thumbnailURL,
+              approved: false,
+            };
+
+            let webinars = JSON.parse(localStorage.getItem("webinars")) || [];
+
+            if (webinars.length >= 10) {
+              webinars.shift();
+            }
+
+            webinars.push(webinarData);
+            localStorage.setItem("webinars", JSON.stringify(webinars));
+
+            alert("Webinar berhasil ditambahkan");
+
+            document.getElementById("webinar-form").reset();
+          }
+        });
+    </script>
+  </body>
+</html>

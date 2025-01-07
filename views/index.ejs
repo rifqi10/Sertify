@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sertify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      .profile-icon {
+        font-size: 2.5rem;
+      }
+    </style>
+  </head>
+  <body class="font-sans antialiased bg-gray-50">
+    <!-- Header -->
+    <header class="px-6 py-4 bg-white">
+      <div class="container flex items-center justify-between mx-auto">
+        <h1 class="text-2xl font-bold text-yellow-500">Sertify</h1>
+        <nav class="flex space-x-4">
+          <a href="/" class="text-gray-700">Home</a>
+          <a href="/listWebinar" class="text-gray-700">Webinar</a>
+          <a href="/certification" class="text-gray-700">Certification</a>
+          <a href="/support" class="text-gray-700">Support</a>
+          <a href="/createWebinar" class="text-gray-700">Publikasikan</a>
+        </nav>
+        <div id="authButton">
+          <!-- Tombol akan diperbarui oleh JavaScript -->
+        </div>
+      </div>
+    </header>
+    <!-- Hero Section -->
+    <section class="py-16 bg-white">
+      <div
+        class="container flex flex-col items-center mx-auto text-center md:flex-row md:items-center md:justify-center md:space-x-8"
+      >
+        <!-- Teks -->
+        <div class="text-left md:w-1/2">
+          <h2 class="mb-4 text-4xl font-bold text-yellow-500">
+            Upgrade Pengetahuanmu,
+          </h2>
+          <h3 class="text-3xl font-bold text-gray-800">
+            Dapatkan Sertifikat Gratis Sekarang!
+          </h3>
+          <p class="mt-4 text-gray-600">
+            Temukan Kumpulan Webinar untuk Mengasah Pengetahuan dan Meningkatkan
+            Keahlianmu!
+          </p>
+        </div>
+        <!-- Gambar -->
+        <div class="flex justify-center md:w-1/2">
+          <img
+            src="img/landingPage.png"
+            alt="Hero Image"
+            class="w-3/4 md:w-[500px]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefit Section -->
+    <section class="py-16 text-white bg-gray-900">
+      <div class="container mx-auto text-center">
+        <h3 class="mb-12 text-3xl font-bold">
+          Benefit Luar Biasa yang Akan Kamu Dapatkan!
+        </h3>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div class="p-6 bg-yellow-500 rounded-lg shadow-lg">
+            <h4 class="mb-2 text-xl font-bold">
+              Belajar Langsung dari Ahlinya
+            </h4>
+            <p class="text-sm">
+              Dapatkan wawasan mendalam dari para ahli di bidangnya yang siap
+              membagikan pengalaman dan pengetahuan mereka.
+            </p>
+          </div>
+          <div class="p-6 bg-yellow-500 rounded-lg shadow-lg">
+            <h4 class="mb-2 text-xl font-bold">
+              Perluas Wawasan dan Pengetahuan
+            </h4>
+            <p class="text-sm">
+              Tingkatkan pemahaman di berbagai bidang dengan materi yang
+              dirancang untuk memperluas pengetahuanmu.
+            </p>
+          </div>
+          <div class="p-6 bg-yellow-500 rounded-lg shadow-lg">
+            <h4 class="mb-2 text-xl font-bold">
+              Sertifikat Gratis untuk Setiap Webinar
+            </h4>
+            <p class="text-sm">
+              Ikuti webinar dan dapatkan sertifikat secara gratis sebagai
+              pengakuan atas pengetahuan baru yang kamu peroleh.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto text-center">
+        <h3 class="mb-8 text-2xl font-bold text-gray-800">
+          Kenapa Memilih Aplikasi Sertify?
+        </h3>
+        <p class="text-gray-600">
+          Karena kami menawarkan akses ke webinar berkualitas tinggi, bimbingan
+          langsung dari para ahli, dan sertifikat gratis yang meningkatkan
+          kredibilitasmu—semua dalam satu platform yang mudah diakses!
+        </p>
+      </div>
+    </section>
+
+    <!-- Include Footer -->
+    <%- include('partials/footer') %>
+
+    <script>
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      const authButton = document.getElementById("authButton");
+
+      if (isLoggedIn === "true") {
+        authButton.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <a href="/userProfile">
+                <i class="cursor-pointer profile-icon fas fa-user-circle"></i> 
+            </a>
+                    <button id="logoutButton" class="px-4 py-2 text-white bg-red-500 rounded-lg">Logout</button>
+                </div>
+            `;
+
+        document
+          .getElementById("logoutButton")
+          .addEventListener("click", function () {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("currentUser ");
+            alert("Anda berhasil logout!");
+            window.location.href = "/";
+          });
+      } else {
+        authButton.innerHTML = `
+                <a href="/login" class="px-4 py-2 text-white bg-yellow-500 rounded-lg">Sign In</a>
+            `;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="flex items-center justify-center min-h-screen bg-gray-50">
+    <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+      <h2 class="mb-4 text-2xl font-bold text-center text-yellow-500">Login</h2>
+      <form id="loginForm">
+        <div class="mb-4">
+          <label for="username" class="block text-gray-700">Username</label>
+          <input
+            type="text"
+            id="username"
+            class="w-full px-4 py-2 border rounded-lg"
+            placeholder="Enter username"
+            required
+          />
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block text-gray-700">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="w-full px-4 py-2 border rounded-lg"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full px-4 py-2 font-bold text-white bg-yellow-500 rounded-lg"
+        >
+          Login
+        </button>
+      </form>
+      <p class="mt-4 text-center">
+        Belum punya akun?
+        <a href="/register" class="text-yellow-500">Register</a>
+      </p>
+    </div>
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          // Cek username dan password
+          if (username === "admin" && password === "admin123") {
+            alert("Login berhasil!");
+            localStorage.setItem("isLoggedIn", true);
+
+            // Simpan data pengguna admin
+            localStorage.setItem(
+              "currentUser  ",
+              JSON.stringify({
+                username: "admin",
+                email: "admin@example.com",
+                phone: "1234567890",
+                job: "Administrator",
+              })
+            );
+
+            window.location.href = "/admin/adminWebinar";
+          } else {
+            // Cek localStorage untuk pengguna yang terdaftar
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const user = users.find(
+              (user) => user.username === username && user.password === password
+            );
+
+            if (user) {
+              alert("Login berhasil!");
+              localStorage.setItem("isLoggedIn", true);
+
+              // Simpan data pengguna yang berhasil login
+              localStorage.setItem("currentUser  ", JSON.stringify(user));
+
+              window.location.href = "/";
+            } else {
+              alert(
+                "Username atau password salah! Silakan daftar terlebih dahulu."
+              );
+              window.location.href = "/register";
+            }
+          }
+        });
+    </script>
+  </body>
+</html>
